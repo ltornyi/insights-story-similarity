@@ -12,7 +12,7 @@ stories = insights_api.getAllStories(pages)
 cardParser = CardParser()
 stories_text = []
 for story in stories:
-    story_text = {'title': story['title'], 'topLine': story['topLine'], 'id': story['id']}
+    story_text = {'title': story['title'], 'topLine': story['topLine'], 'id': story['id'], 'publishedAt': story['publishedAt']}
     cardParser.clear()
     for card in story['cards']:
         if card['cardType'] in ['body', 'quote', 'stat', 'bottom_line']:

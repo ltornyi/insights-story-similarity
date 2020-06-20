@@ -1,17 +1,29 @@
 import json
-from nltk.tokenize import word_tokenize
+from nltk.tokenize import RegexpTokenizer
 import gensim
 
-def de_unicode(str):
-    return str.replace('\u2014',' - ').replace('\u2002', ' ').replace('\u201c','"').replace('\u201d','"')
+TRANSLATE_DICT = {
+    '\u2014': '-',
+    '\u2002': ' ',
+    '\u201c': '"',
+    '\u201d': '"',
+    '.': None,
+    ',': None,
+    '!': None,
+    '?': None,
+    ':': None
+}
+
+_translate_tab = "".maketrans(TRANSLATE_DICT)
+_tokenizer = RegexpTokenizer(r'\s+', gaps=True)
 
 
 def get_story_fulltext(story):
-    return de_unicode(story['title'] + ' ' + story['topLine'] + ' ' + story['text']) 
+    return (story['title'] + ' ' + story['topLine'] + ' ' + story['text']).translate(_translate_tab).lower()
 
 
 def tokenize_story(story):
-    return [w.lower() for w in word_tokenize(get_story_fulltext(story))]
+    return [w for w in _tokenizer.tokenize(get_story_fulltext(story))]
 
 
 def read_stories(filename):
